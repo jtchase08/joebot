@@ -6,9 +6,7 @@ Comes using GPT-3.5-Turbo.
 
 This is intended to be built on top of and developed further as you see fit. At least for now.
 
----
-
-## Screenshot(s)
+### Screenshot(s)
 
 ![image of sample convo](https://files.catbox.moe/gpt0r3.png)
 
