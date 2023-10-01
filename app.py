@@ -1,5 +1,6 @@
 from flask import Flask, request, jsonify, render_template
 import requests
+import os
 
 app = Flask(__name__)
 
@@ -14,26 +15,49 @@ headers = {
     "Content-Type": "application/json"
 }
 
+chat_history = []
+
 @app.route('/')
 def index():
     return render_template('index.html')
 
 @app.route('/ask', methods=['POST'])
 def ask():
+
+    global chat_history
     data = request.json
+
+    # Append user's message to chat history
+    chat_history.append({"role": "user", "content": data['prompt']})
+
+    # Make sure chat_history doesn't get too long (optional and basic implementation)
+    while len(chat_history) > 100:  # Keep the last 10 interactions, adjust as needed
+        chat_history.pop(0)
+
+    # Build data being sent through the API
     payload = {
         "model": "gpt-3.5-turbo",
-        "messages": [{"role": "user", "content": data['prompt']}]
+        "messages": chat_history
     }
+
+    # Sending the data
     response = requests.post(OPENAI_API_ENDPOINT, headers=headers, json=payload)
+    
+    # Storing the response
     response_data = response.json()
 
+
+    # This code checks the API's response for a valid chatbot reply, appends it to the 
+    # chat history, and returns it; otherwise, it handles unexpected responses and 
+    # returns an error.
     if 'choices' in response_data:
-        return jsonify(response_data['choices'][0]['message']['content'].strip())
+        chatbot_response = response_data['choices'][0]['message']['content'].strip()
+        chat_history.append({"role": "assistant", "content": chatbot_response})
+        return jsonify(chatbot_response)
     else:
-        # Print or log the unexpected response for debugging purposes
         print("Unexpected response:", response_data)
         return jsonify("An error occurred.")
+
 
 if __name__ == '__main__':
     app.run(debug=True)
