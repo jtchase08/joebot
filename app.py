@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify, render_template
+from flask import Flask, request, jsonify, render_template, Response
 import requests
 
 app = Flask(__name__)
@@ -15,6 +15,24 @@ headers = {
 }
 
 chat_history = []
+
+@app.route('/export_markdown', methods=['GET'])
+def export_markdown():
+    markdown_content = ""
+    
+    for message in chat_history:
+        if message["role"] == "user":
+            markdown_content += f"**User**: {message['content']}\n\n"
+        else:
+            markdown_content += f"**Assistant**: {message['content']}\n\n"
+    
+    return Response(markdown_content, mimetype="text/markdown", headers={"Content-disposition": "attachment; filename=chat_history.md"})
+
+@app.route('/clear_server_chat_history', methods=['POST'])
+def clear_server_chat_history():
+    global chat_history
+    chat_history = []
+    return jsonify(success=True)
 
 @app.route('/')
 def index():

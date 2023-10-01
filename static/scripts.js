@@ -80,9 +80,18 @@ function sendMessage() {
 }
 
 function clearChatHistory() {
+    // Clears chat history on client
     const chatArea = document.getElementById("chatArea");
     chatArea.innerHTML = '';  // clear the chat area
     localStorage.removeItem('chatHistory');  // clear from local storage
+
+    // Clears chat history on the server
+    fetch("/clear_server_chat_history", {
+        method: "POST"
+    })
+    .catch(error => {
+        console.error("Error clearing server chat history:", error);
+    });
 }
 
 // Adjust the size of the input box based on its content
@@ -104,4 +113,8 @@ function toggleDarkMode() {
         body.classList.add('dark-mode');
         toggleButton.innerHTML = "☀️";  // Sun for dark mode
     }
+}
+
+function exportAsMarkdown() {
+    window.location.href = "/export_markdown";
 }
