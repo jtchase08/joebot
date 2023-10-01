@@ -30,7 +30,7 @@ def ask():
     chat_history.append({"role": "user", "content": data['prompt']})
 
     # Make sure chat_history doesn't get too long (optional and basic implementation)
-    while len(chat_history) > 100:  # Keep the last 10 interactions, adjust as needed
+    while len(chat_history) > 100:  # Keep the last 100 interactions, adjust as needed
         chat_history.pop(0)
 
     # Build data being sent through the API
