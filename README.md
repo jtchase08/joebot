@@ -1,6 +1,6 @@
 # joebot
 
-A simple chatbot using any OpenAI model you want.
+A simple client-side chatbot using any OpenAI model you want.
 
 Comes using GPT-3.5-Turbo.
 
