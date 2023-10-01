@@ -6,114 +6,14 @@
     <title>joebot</title>
     <link rel="icon" href="{{ url_for('static', filename='favicon.png') }}" type="image/png">
 
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            display: flex;
-            flex-direction: column;
-            height: 100vh;
-            margin: 0;
-            padding: 0;
-        }
-        #chatArea {
-            flex: 1;
-            overflow-y: auto;
-            padding: 10px;
-            border-bottom: 1px solid #ccc;
-        }
-        #inputArea {
-            padding: 10px;
-        }
-        .user, .assistant {
-            padding: 5px;
-            margin: 5px 0;
-            border-radius: 5px;
-            max-width: 80%;
-        }
-        .user {
-            align-self: flex-end;
-            background-color: #f0f0f0;
-        }
-        .assistant {
-            align-self: flex-start;
-            background-color: #d9e7ff;
-        }
-
-        /* CSS Spinner */
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        #spinner {
-            border: 5px solid #f3f3f3;
-            border-top: 5px solid #6272a4; /* Dracula Cyan */
-            border-radius: 50%;
-            width: 15px;
-            height: 15px;
-            animation: spin 1s linear infinite;
-            margin: 10px auto;
-            display: block;
-        }
-
-        /* Toggle Dark Mode Button */
-        #toggleDarkMode {
-            position: fixed;
-            right: 10px;
-            top: 10px;
-            width: 40px;
-            height: 40px;
-            border: none;
-            border-radius: 50%;  /* Makes it a circle */
-            background-color: #6272a4;  /* Dracula Cyan */
-            color: #f8f8f2;  /* Dracula Foreground */
-            font-size: 24px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-            z-index: 1000;  /* Ensures it's above other elements */
-        }
-
-        #toggleDarkMode:hover {
-            background-color: #bd93f9;  /* Dracula Green */
-        }
-    
-        /* Default Light Mode */
-        #message {
-            padding: 5px;
-            border-radius: 5px;
-            border: 1px solid #ccc;
-            background-color: #f0f0f0;
-            resize: none;
-            width: calc(100% - 12px);
-            max-width: calc(100% - 12px);
-            box-sizing: border-box;
-        }
-    
-        /* Dracula Dark Mode */
-        body.dark-mode {
-            background-color: #282a36;
-            color: #f8f8f2;
-        }
-    
-        body.dark-mode .user {
-            background-color: #44475a;
-            color: #f8f8f2;
-        }
-    
-        body.dark-mode .assistant {
-            background-color: #6272a4;
-            color: #f8f8f2;
-        }
-    
-        body.dark-mode #message {
-            background-color: #44475a;
-            color: #f8f8f2;
-        }
-    </style>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
     
 </head>
 <body class="dark-mode">
-    <button id="toggleDarkMode" onclick="toggleDarkMode()">☀️</button>
+    
+    <!-- Control Center -->
+    <button id="toggleDarkMode" onclick="toggleDarkMode()" >☀️</button>
+    <button id="clearHistory" onclick="clearChatHistory()" >🗑️</button>
 
     <div id="chatArea">
         <!-- Chat messages will appear here -->
@@ -129,82 +29,7 @@
         <!-- <button onclick="sendMessage()">Send</button> -->
     </div>
 
-    <script>
-        function sendMessage() {
-            const messageBox = document.getElementById("message");
-            const chatArea = document.getElementById("chatArea");
-            
-            // Prevent sending if the message is empty
-            if (!messageBox.value.trim()) return;
+    <script src="{{ url_for('static', filename='scripts.js') }}"></script>
 
-            // Append user's message to chat area
-            const userDiv = document.createElement("div");
-            userDiv.className = "user";
-            userDiv.textContent = messageBox.value;
-            chatArea.appendChild(userDiv);
-
-            // Create and append a spinner to chat area just below the user's message
-            const spinner = document.createElement("div");
-            spinner.id = "spinner";
-            chatArea.appendChild(spinner);
-
-            // Make AJAX call to your Flask API to get the chatbot's response
-            fetch("/ask", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({ prompt: messageBox.value })
-            })
-            .then(response => response.json())
-            .then(data => {
-                // Remove spinner from chat area
-                chatArea.removeChild(spinner);
-
-                // Append ChatGPT's response to chat area
-                const assistantDiv = document.createElement("div");
-                assistantDiv.className = "assistant";
-                assistantDiv.textContent = data;
-                chatArea.appendChild(assistantDiv);
-            })
-            .catch(error => {
-                console.error("Error fetching chatbot response:", error);
-
-                // Remove spinner in case of error too
-                chatArea.removeChild(spinner);
-            });
-
-            // Clear and refocus input box
-            messageBox.value = "";
-            messageBox.setAttribute("size", 1);
-            messageBox.focus();
-
-            // Prevent default form submission
-            event.preventDefault();
-        }
-
-
-
-        // Adjust the size of the input box based on its content
-        function adjustInputSize() {
-            const messageBox = document.getElementById("message");
-            const maxSize = messageBox.style.maxWidth.replace('px', '');  // Convert "###px" to an integer
-            const currentSize = messageBox.value.length * 8;  // Rough estimate of width per character
-            messageBox.setAttribute("size", Math.min(currentSize, maxSize));
-        }
-
-        function toggleDarkMode() {
-            const body = document.body;
-            const toggleButton = document.getElementById('toggleDarkMode');
-
-            if (body.classList.contains('dark-mode')) {
-                body.classList.remove('dark-mode');
-                toggleButton.innerHTML = "🌙";  // Moon for light mode
-            } else {
-                body.classList.add('dark-mode');
-                toggleButton.innerHTML = "☀️";  // Sun for dark mode
-            }
-        }
-    </script>
 </body>
 </html>
