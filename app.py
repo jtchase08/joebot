@@ -3,7 +3,9 @@ import requests
 
 app = Flask(__name__)
 
-with open('api_key.txt', 'r') as file: # Add your API key to api_key.txt
+# Change from 'my_api_key.txt' to 'api_key.txt', and then add your API key to that file.
+# I use a separate file for my API when developing so I don't share my API key. :P
+with open('my_api_key.txt', 'r') as file: 
     API_KEY = file.read()
 OPENAI_API_ENDPOINT = "https://api.openai.com/v1/chat/completions"
 
