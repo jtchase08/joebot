@@ -13,7 +13,7 @@ This is intended to be built on top of and developed further as you see fit. At 
 
 ### Screenshot(s)
 
-![image of sample convo](https://files.catbox.moe/tltdqr.png)
+<img src="https://files.catbox.moe/tltdqr.png" width="400">
 
 ### How to use
 
