@@ -2,13 +2,18 @@
 
 A simple client-side chatbot using any OpenAI model you want.
 
-Comes using GPT-3.5-Turbo.
-
 This is intended to be built on top of and developed further as you see fit. At least for now.
+
+### Features
+
+* Uses GPT-3.5-Turbo, but can be changed to any other model OpenAI offers
+* Has a simple day/night mode toggle
+* Trash can clears chat history
+* Save icon saves your visible chat history as a Markdown (.md) file
 
 ### Screenshot(s)
 
-![image of sample convo](https://files.catbox.moe/gpt0r3.png)
+![image of sample convo](https://files.catbox.moe/tltdqr.png)
 
 ### How to use
 
